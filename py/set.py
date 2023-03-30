@@ -2,10 +2,9 @@ s = set() # empty set (no literal syntax for empty set)
 s = {1,2,3}
 2 in s    # True  O(1)
 del s
-{1,2,3} == set([1,2,3]) # True
+True
 
-s = {1,2,3}
-s.add('foo')        # {1,2,3,'foo'}
+s = {1, 2, 3, 'foo'}
 s.update({'bar',4}) # {1,2,3,4,'foo','bar'}
 s.update([5,6])     # {1,2,3,4,5,'foo',6,'bar'}
 s.remove(5)         # {1,2,3,4,'foo',6,'bar'}
@@ -34,8 +33,6 @@ squares = {x**2 for x in [0,2,4] if x < 4} # {0, 4}
 # unhashable type
 d = {'a':1}
 s = {d}  # TypeError: unhashable type: 'dict'
-s.add(d) # ...
-
 # sets cannot be sorted
 sorted({3,2,1})       # [1,2,3]        (cuz auto casted to list)
 sorted({'c','b','a'}) # ['a','b','c']  ...

@@ -8,12 +8,12 @@ from numpy import dstack
 
 # load models from file
 def load_all_models(n_models):
-	all_models = list()
+	all_models = []
 	for i in range(n_models):
-		filename = 'models/model_' + str(i + 1) + '.h5'
+		filename = f'models/model_{str(i + 1)}.h5'
 		model = load_model(filename)
 		all_models.append(model)
-		print('&gt;loaded %s' % filename)
+		print(f'&gt;loaded {filename}')
 	return all_models
 
 # create stacked model input dataset as outputs from the ensemble
@@ -21,11 +21,7 @@ def stacked_dataset(members, inputX):
 	stackX = None
 	for model in members:
 		yhat = model.predict(inputX, verbose=0)
-		if stackX is None: # stack predictions into [rows, members, probabilities]
-			stackX = yhat
-		else:
-			stackX = dstack((stackX, yhat))
-	
+		stackX = yhat if stackX is None else dstack((stackX, yhat))
 	stackX = stackX.reshape((stackX.shape[0], stackX.shape[1]*stackX.shape[2])) # flatten predictions to [rows, members x probabilities]
 	return stackX
 
@@ -39,8 +35,7 @@ def fit_stacked_model(members, inputX, inputy):
 # make a prediction with the stacked model
 def stacked_prediction(members, model, inputX):
 	stackedX = stacked_dataset(members, inputX) # create dataset using ensemble
-	yhat = model.predict(stackedX) # make a prediction
-	return yhat
+	return model.predict(stackedX)
 
 X, y = make_blobs(n_samples=1100, centers=3, n_features=2, cluster_std=2, random_state=2) # generate 2d classification dataset
 

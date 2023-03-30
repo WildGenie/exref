@@ -33,34 +33,34 @@ from keras.layers import Flatten, Dense
 
 def objective(trial):
 	n_layers = trial.suggest_int('n_layers', 1, 3)
-	
+
 	model = keras.Sequential()
 	model.add(Flatten())
-	
+
 	for i in range(n_layers):
 		n_units = trial.suggest_int(f'n_units_l{i}', 4, 128, log=True)
 		model.add(Dense(n_units, activation='relu'))
-	
+
 	model.add(Dense(CLASSES))
-	
+
 	optimizer = keras.optimizers.Adam()
-	
+
 	metric = keras.metrics.SparseCategoricalAccuracy()
-	
-	for epoch in range(EPOCHS):
+
+	for _ in range(EPOCHS):
 		for x_batch_train, y_batch_train in train_dataset:
 			with tf.GradientTape() as tape:
 				logits = model(x_batch_train, training=True)
 				loss_value = loss_fn(y_batch_train, logits)
 			grads = tape.gradient(loss_value, model.trainable_weights)
 			optimizer.apply_gradients(zip(grads, model.trainable_weights))
-		
+
 		for x_batch_val, y_batch_val in val_dataset:
 			val_logits = model(x_batch_val, training=False)
 			metric.update_state(y_batch_val, val_logits)
 		val_acc = metric.result()
 		metric.reset_states()
-	
+
 	return val_acc # last validation accuracy
 
 
@@ -74,4 +74,4 @@ trial = study.best_trial
 print('  Value: ', trial.value)
 print('  Params: ')
 for key, value in trial.params.items():
-	print('    {}: {}'.format(key, value))
+	print(f'    {key}: {value}')

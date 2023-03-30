@@ -59,7 +59,9 @@ hist['epoch'] = history.epoch
 # show RMSE measure to compare to Kaggle leaderboard on https://www.kaggle.com/c/boston-housing/leaderboard
 rmse_final = np.sqrt(float(hist['val_mean_squared_error'].tail(1)))
 print()
-print('Final Root Mean Square Error on validation set: {}'.format(round(rmse_final, 3)))
+print(
+	f'Final Root Mean Square Error on validation set: {round(rmse_final, 3)}'
+)
 
 
 # plot the loss function measure on the training and validation sets
@@ -78,4 +80,4 @@ plot_history()
 test_features_norm = (test_features - train_mean) / train_std
 mse, _, _ = model.evaluate(test_features_norm, test_labels)
 rmse = np.sqrt(mse)
-print('Root Mean Square Error on test set: {}'.format(round(rmse, 3)))
+print(f'Root Mean Square Error on test set: {round(rmse, 3)}')

@@ -26,12 +26,12 @@ def scale(nums=[], newbound=[0,1]):
 	a, b = minmax(nums)
 	if a == b:
 		for i in range(17, 0, -1):
-			j = float('1e-'+str(i))
+			j = float(f'1e-{str(i)}')
 			if b+j > a:
 				b += j
 				break
-		if a == b:
-			raise Exception('Equal bounds error!')
+	if a == b:
+		raise Exception('Equal bounds error!')
 	c, d = newbound
 	dx, dy = b-a, d-c
 	return [(x-a) * dy / dx + c for x in nums]
@@ -62,55 +62,51 @@ def cusum(x=[], h=0):
 def slope(x=[], y=[]):
 	m = []
 	N = len(x)
-	for i0, i1 in zip(range(N), range(1, N)):
-		dx = x[i1] - x[i0]
-		dy = y[i1] - y[i0]
-		m.append(dy / dx)
+	m.extend(
+		(y[i1] - y[i0]) / (x[i1] - x[i0]) for i0, i1 in zip(range(N), range(1, N))
+	)
 	return m
 
 def slope_np(x=[], y=[]):
 	dx = np.diff(x)
 	dy = np.diff(y)
-	m = dy / dx
-	return m
+	return dy / dx
 
 def sma(nums=[], period=2, fill=None):
 	pi = period - 1 if period > 0 else 0
 	res = [fill] * pi
-	
+
 	if period > 0:
 		for i in range(pi, len(nums)):
 			res.append( mean(nums[i-pi:i+1]) )
 	else:
-		res = [ mean(nums[0:i+1]) for i,v in enumerate(nums) ]
-	
+		res = [mean(nums[:i+1]) for i,v in enumerate(nums)]
+
 	return res
 
 def ema(nums=[], period=2, fill=None):
 	res = [fill] * (period-1)
-	
-	res.append( mean(nums[0:period]) )
-	
+
+	res.append(mean(nums[:period]))
+
 	m = 2 / (period+1)
-	
+
 	for i in range(period, len(nums)):
 		n = (nums[i] * m) + (res[i-1] * (1-m))
 		res.append(n)
-	
+
 	return res
 
 def ema_formal(nums=[], alpha=1):
 	if alpha < 0 or alpha > 1:
 		return
-	
-	S = []
-	
-	S.append( nums[0] )
-	
+
+	S = [nums[0]]
+
 	for j, num in enumerate(nums[1:]):
 		s = alpha * num + (1-alpha) * S[j]
 		S.append(s)
-	
+
 	return S
 
 def ewm(data, span=2, adjust=True):
@@ -120,9 +116,9 @@ def ewm(data, span=2, adjust=True):
 
 	a = 2 / (span + 1)
 
-	for j in range(0, len(data)):
+	for j in range(len(data)):
 		# get window
-		z = np.array(data.iloc[0:j+1].tolist())
+		z = np.array(data.iloc[:j+1].tolist())
 
 		# get weights
 		n = len(z)
@@ -131,22 +127,22 @@ def ewm(data, span=2, adjust=True):
 		else:
 			w = [ a*(1-a)**i if i<j else (1-a)**i for i in range(n-1, -1, -1) ]
 			w = np.array(w)
-		
+
 		w_sum = np.sum(w)
 		w_sumsqr = w_sum ** 2
-		
+
 		# calc exponential weighted mean
 		ewma = np.sum(w*z) / w_sum
-		
+
 		# calc bias
 		bias = w_sumsqr / ( w_sumsqr - np.sum(w**2) )
-		
+
 		# calc exponential weighted variance
 		ewmvar = bias * np.sum( (w * (z-ewma) ** 2) / w_sum )
-		
+
 		# calc exponential weighted standard deviation
 		ewmstd = np.sqrt(ewmvar)
-		
+
 		meancalc.append(ewma)
 		varcalc.append(ewmvar)
 		stdcalc.append(ewmstd)

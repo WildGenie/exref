@@ -29,6 +29,6 @@ makedirs('models') # create directory for models
 n_members = 5
 for i in range(n_members):
 	model = fit_model(trainX, trainy)
-	filename = 'models/model_' + str(i + 1) + '.h5'
+	filename = f'models/model_{str(i + 1)}.h5'
 	model.save(filename)
-	print('&gt;Saved %s' % filename)
+	print(f'&gt;Saved {filename}')

@@ -1,34 +1,21 @@
 open(file, mode='r|w|x|a|b|t|+', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)
-	mode=
-		'r' # read (default)
-		'w' # write (truncate file first)
-		'x' # create file, err if exists
-		'a' # write, append if exists
-		'b' # binary mode
-		't' # text mode (default)
-		'+' # update (read and write)
-	encoding= locale.getpreferredencoding(False) # default encoding (platform-dependent): 'cp1252'
+mode=
+	'r' # read (default)
+'w' # write (truncate file first)
+'x' # create file, err if exists
+'a' # write, append if exists
+'b' # binary mode
+'t' # text mode (default)
+'+' # update (read and write)
+encoding= locale.getpreferredencoding(False) # default encoding (platform-dependent): 'cp1252'
 
-# manual (file never closes if exception thrown)
-# read
-f = open('file.txt')
-_str = f.read()
-f.close()
-
-# write
-f = open('file.txt', 'w', encoding='utf-8')
-f.write('hi')
-f.close()
-
-# append
-f = open('file.txt', 'a')
-f.write('hi')
-f.close()
-
+_str = pathlib.Path('file.txt').read_text()
+with open('file.txt', 'w', encoding='utf-8') as f:
+	f.write('hi')
+with open('file.txt', 'a') as f:
+	f.write('hi')
 # `with` (auto cleanup of resource)
-with open('file.txt') as f:
-	_str = f.read()
-
+_str = pathlib.Path('file.txt').read_text()
 with open('file.txt', 'w') as f:
 	f.write('hi')
 

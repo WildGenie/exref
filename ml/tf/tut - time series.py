@@ -169,7 +169,7 @@ plt.show()
 column_indices = {name: i for i, name in enumerate(df.columns)}
 
 n = len(df)
-train_df = df[0:int(n*0.7)]
+train_df = df[:int(n*0.7)]
 val_df = df[int(n*0.7):int(n*0.9)]
 test_df = df[int(n*0.9):]
 
@@ -474,12 +474,10 @@ baseline = Baseline(label_index=column_indices['T (degC)'])
 
 baseline.compile(loss=tf.losses.MeanSquaredError(), metrics=[tf.metrics.MeanAbsoluteError()])
 
-val_performance = {}
-performance = {}
-val_performance['Baseline'] = baseline.evaluate(single_step_window.val)
-performance['Baseline'] = baseline.evaluate(single_step_window.test, verbose=0)
-
-
+val_performance = {'Baseline': baseline.evaluate(single_step_window.val)}
+performance = {
+	'Baseline': baseline.evaluate(single_step_window.test, verbose=0)
+}
 # That printed some performance metrics, but those don't give you a feeling for how well the model is doing.
 # The `WindowGenerator` has a plot method, but the plots won't be very interesting with only a single sample.
 # So, create a wider `WindowGenerator` that generates windows 24 hours of consecutive inputs and labels at a time.
@@ -535,8 +533,12 @@ def compile_and_fit(model, window, patience=2):
 
 	model.compile(loss=tf.losses.MeanSquaredError(), optimizer=tf.optimizers.Adam(), metrics=[tf.metrics.MeanAbsoluteError()])
 
-	history = model.fit(window.train, epochs=MAX_EPOCHS, validation_data=window.val, callbacks=[early_stopping])
-	return history
+	return model.fit(
+		window.train,
+		epochs=MAX_EPOCHS,
+		validation_data=window.val,
+		callbacks=[early_stopping],
+	)
 
 # Train the model and evaluate its performance:
 history = compile_and_fit(linear, single_step_window)
@@ -906,11 +908,10 @@ class MultiStepLastBaseline(tf.keras.Model):
 last_baseline = MultiStepLastBaseline()
 last_baseline.compile(loss=tf.losses.MeanSquaredError(), metrics=[tf.metrics.MeanAbsoluteError()])
 
-multi_val_performance = {}
-multi_performance = {}
-
-multi_val_performance['Last'] = last_baseline.evaluate(multi_window.val)
-multi_performance['Last'] = last_baseline.evaluate(multi_window.test, verbose=0)
+multi_val_performance = {'Last': last_baseline.evaluate(multi_window.val)}
+multi_performance = {
+	'Last': last_baseline.evaluate(multi_window.test, verbose=0)
+}
 multi_window.plot(last_baseline)
 plt.show()
 # Since this task is to predict 24 hours into the future, given 24 hours of the past,
@@ -1081,16 +1082,12 @@ print(prediction.shape)
 # For a dynamic output length, you would need to use a `tf.TensorArray` instead of a Python list, and `tf.range` instead of the Python `range`.
 
 def call(self, inputs, training=None):
-	# Use a TensorArray to capture dynamically unrolled outputs.
-	predictions = []
 	# Initialize the LSTM state.
 	prediction, state = self.warmup(inputs)
 
-	# Insert the first prediction.
-	predictions.append(prediction)
-
+	predictions = [prediction]
 	# Run the rest of the prediction steps.
-	for n in range(1, self.out_steps):
+	for _ in range(1, self.out_steps):
 		# Use the last prediction as input.
 		x = prediction
 		# Execute one lstm step.
@@ -1133,7 +1130,7 @@ plt.bar(x - 0.17, val_mae, width, label='Validation')
 plt.bar(x + 0.17, test_mae, width, label='Test')
 plt.xticks(ticks=x, labels=multi_performance.keys(),
 					 rotation=45)
-plt.ylabel(f'MAE (average over all times and outputs)')
+plt.ylabel('MAE (average over all times and outputs)')
 _ = plt.legend()
 plt.show()
 

@@ -31,7 +31,7 @@ val_acc_metric   = keras.metrics.SparseCategoricalAccuracy()
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # eager execution
-for epoch in range(EPOCHS):
+for _ in range(EPOCHS):
 	for x_batch_train, y_batch_train in train_dataset:
 		with tf.GradientTape() as tape:
 			logits = model(x_batch_train, training=True)
@@ -42,7 +42,7 @@ for epoch in range(EPOCHS):
 	train_acc = train_acc_metric.result()
 	print('train_accuracy', float(train_acc))
 	train_acc_metric.reset_states()
-	
+
 	for x_batch_val, y_batch_val in val_dataset:
 		val_logits = model(x_batch_val, training=False)
 		val_acc_metric.update_state(y_batch_val, val_logits)
@@ -66,14 +66,14 @@ def val_step(x, y):
 	val_logits = model(x, training=False)
 	val_acc_metric.update_state(y, val_logits)
 
-for epoch in range(EPOCHS):
+for _ in range(EPOCHS):
 	for x_batch_train, y_batch_train in train_dataset:
 		loss_value = train_step(x_batch_train, y_batch_train)
-	
+
 	train_acc = train_acc_metric.result()
 	print('train_accuracy', float(train_acc))
 	train_acc_metric.reset_states()
-	
+
 	for x_batch_val, y_batch_val in val_dataset:
 		val_step(x_batch_val, y_batch_val)
 	val_acc = val_acc_metric.result()
@@ -81,7 +81,7 @@ for epoch in range(EPOCHS):
 	print('val_accuracy', float(val_acc), '\n')
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-pred = model.predict(x_test[0:1]).tolist()[0]
+pred = model.predict(x_test[:1]).tolist()[0]
 pred = pred.index(np.max(pred))
 print(f'''
 pred: {pred}

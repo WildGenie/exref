@@ -30,7 +30,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
 			buf = connection.recv(1024)
 			msg = str(buf,'utf8')
 			print('client said:', msg)
-			connection.sendall( bytes('server said: '+msg.upper(), 'utf8') )
+			connection.sendall(bytes(f'server said: {msg.upper()}', 'utf8'))
 			if msg == 'exit':
 				print('server exiting...')
 				server.close()

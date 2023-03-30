@@ -9,7 +9,7 @@ def kfold(splits_n=1, arr=[], by_value=False):
 	for c in [0] + [*range(1,splits_n)]:
 		C = n * c
 		i0, i1 = N-n-C, N-C
-		r.append({ 'chunk': a[i0:i1], 'rest': a[0:i0] + a[i1:] })
+		r.append({'chunk': a[i0:i1], 'rest': a[:i0] + a[i1:]})
 	return r
 
 print(

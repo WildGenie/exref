@@ -5,7 +5,7 @@ d['foo']               # 2
 d['baz'](2)            # 4
 d.keys()               # ['foo','bar','baz']
 [*d]                   # ...
-[k for k in d]         # ...
+list(d)
 d.values()             # [2, 7, <function>]
 [d[k] for k in d]      # ...
 d.items()              # [ ('foo',2), ('bar',7), ('baz',<function>) ]
@@ -13,7 +13,7 @@ for k in d: print(d[k])
 del d['baz']           # {'foo':2, 'bar':7}
 d.get('foo')           # 2
 d.setdefault('baz',8)  # 8,  d: {'foo':2, 'bar':7, 'baz':8}
-d.update({'foo':97})   # {'foo':97, 'bar':7, 'baz':8}
+d['foo'] = 97
 {**d, 'foo':97}        # ... (v3.5+)
 d.popitem()            # {'baz':8},  d: {'foo':97, 'bar':7}
 d.pop('bar')           # 7,  d: {'foo':97}
@@ -66,8 +66,7 @@ b # {'x':7, 'y':2}
 
 # ↑... 1-level copy
 a = {'x':1, 'y':2}
-b = {**a}
-b['x'] = 7
+b = {**a, 'x': 7}
 a # {'x':1, 'y':2}
 b # {'x':7, 'y':2}
 

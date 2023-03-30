@@ -212,8 +212,7 @@ def evaluate_model(interpreter):
 	print('\n')
 	# compare prediction results with ground truth labels to calculate accuracy.
 	prediction_digits = np.array(prediction_digits)
-	accuracy = (prediction_digits == test_labels).mean()
-	return accuracy
+	return (prediction_digits == test_labels).mean()
 
 
 # you evaluate the pruned and quantized model and see that the accuracy from TensorFlow persists to the TFLite backend.

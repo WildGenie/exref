@@ -19,10 +19,7 @@ df.to_excel(writer, sheet_name='Sheet1', startrow=1, header=False, index=False)
 workbook = writer.book
 worksheet = writer.sheets['Sheet1']
 
-column_settings = []
-for header in df.columns:
-	column_settings.append({'header': header})
-
+column_settings = [{'header': header} for header in df.columns]
 (max_row, max_col) = df.shape
 worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings})
 worksheet.set_column(0, max_col - 1, 12)

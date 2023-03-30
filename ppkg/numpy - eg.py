@@ -49,8 +49,8 @@ np.interp([1.5, 2.5], x, y) # [3, 5]
 # as operand
 a = np.array([1,2,3,4])
 a * 2  # element-wise product: [2,4,6,8]
-	[i*2 for i in [1,2,3,4]] == list(a*2) # True
-	list(map(lambda i: i*2, [1,2,3,4])) == list(a*2) # True
+[i*2 for i in [1,2,3,4]] == list(a*2) # True
+list(map(lambda i: i*2, [1,2,3,4])) == list(a*2) # True
 a + 2  # [3,4,5,6]
 a - 2  # [-1,0,1,2]
 a / 2  # [.5,1,1.5,2]
@@ -106,9 +106,9 @@ np.where(a % 2 == 0, a, True)  # [1,    2, 1,    4]
 
 a = np.array([1,2,3,None,4,5,None,6])
 b = np.array([9,9,9,9,9,9,9,9])
-np.where(a == None) # [3,6]  index of match
+np.where(a is None)
 np.where(a is None) # []     bad
-np.where(a == None, a, b)     # [9, 9, 9, None, 9, 9, None, 9]
+np.where(a is None, a, b)
 np.where(a != None, a, b)     # [1, 2, 3, 9,    4, 5, 9,    6]
 np.where(a is None, a, b)     # [9, 9, 9, 9,    9, 9, 9,    9]  bad
 np.where(a is not None, a, b) # [1, 2, 3, None, 4, 5, None, 6]  bad
@@ -136,7 +136,7 @@ a[:, :2][b == 0] # [ [1,2], [9,10] ]
 a[:, :2][b == 1] # [ [5,6] ]
 
 a = np.array([1,2,None,4])
-a[a == None]     # [None]
+a[a is None]
 a[a != None]     # [1,2,4]
 a[a is None]     # []                    bad
 a[a is not None] # [[[1, 2, None, 4]]    bad

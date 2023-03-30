@@ -17,13 +17,13 @@ for i in range(1,11):
 	if train == 1:
 		x = []
 		y = []
-		for j in range(10):
+		for _ in range(10):
 			x.append( list( uniform(0,1,i) ) )
 			y.append( labels[ randint(len(labels)) ] )
-		
+
 		if i == 1:
 			x = [i[0] for i in x]
-		
+
 		model = tf.keras.Sequential([
 			tf.keras.layers.Dense(units=3, activation='sigmoid', input_shape=(i,)),
 			tf.keras.layers.Dense(units=5, activation='sigmoid')
@@ -31,12 +31,12 @@ for i in range(1,11):
 		model.compile(optimizer='sgd', loss='binary_crossentropy', metrics=['accuracy'])
 		t1 = timer()
 		model.fit(np.array(x), np.array(y), batch_size=1, epochs=30, verbose=0)
-		print('mod'+str(i) + ' took', round((timer()-t1)/60, 2), 'min')
-		model.save('model'+str(i))
+		print(f'mod{str(i)} took', round((timer()-t1)/60, 2), 'min')
+		model.save(f'model{str(i)}')
 
 	else:
-		model = tf.keras.models.load_model('model'+str(i))
-	
+		model = tf.keras.models.load_model(f'model{str(i)}')
+
 	mods.append(model)
 
 for i in range(9):
@@ -72,11 +72,11 @@ for i in range(10):
 		tf.keras.layers.Dense(units=1, activation='sigmoid')
 	])
 	model.compile(optimizer=tf.keras.optimizers.SGD(0.6), loss='mean_squared_error')
-	
+
 	t1 = timer()
 	model.fit(np.array(x), np.array(y), batch_size=1, epochs=20, verbose=0)
-	print('net'+str(i) + ' done in', round((timer()-t1)/60, 2), 'min')
-	
+	print(f'net{str(i)} done in', round((timer()-t1)/60, 2), 'min')
+
 	mods.append(model)
 
 for i in range(10):

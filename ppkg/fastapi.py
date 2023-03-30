@@ -85,17 +85,14 @@ from typing import Optional
 
 @app.get('/items/{item_id}')
 async def f(item_id: str, q: Optional[str]=None):
-	if q:
-		return {'item_id': item_id, 'q': q}
-	return {'item_id': item_id}
+	return {'item_id': item_id, 'q': q} if q else {'item_id': item_id}
 
 
 
 # required query param (a non-path arg with no default val)
 @app.get('/items/{item_id}')
 async def f(item_id: str, needy: str):
-	item = {'item_id': item_id, 'needy': needy}
-	return item
+	return {'item_id': item_id, 'needy': needy}
 # http://127.0.0.1:8000/items/foo             err
 # http://127.0.0.1:8000/items/foo?needy=32    no err
 

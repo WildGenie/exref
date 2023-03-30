@@ -12,12 +12,12 @@ from numpy import argmax
 
 # load models from file
 def load_all_models(n_models):
-	all_models = list()
+	all_models = []
 	for i in range(n_models):
-		filename = 'models/model_' + str(i + 1) + '.h5'
+		filename = f'models/model_{str(i + 1)}.h5'
 		model = load_model(filename)
 		all_models.append(model)
-		print('&gt;loaded %s' % filename)
+		print(f'&gt;loaded {filename}')
 	return all_models
 
 # define stacked model from multiple member input models
@@ -26,8 +26,8 @@ def define_stacked_model(members):
 		model = members[i]
 		for layer in model.layers:
 			layer.trainable = False
-			layer._name = 'ensemble_' + str(i+1) + '_' + layer.name # avoid 'unique layer name' issue
-	
+			layer._name = f'ensemble_{str(i + 1)}_{layer.name}'
+
 	ensemble_visible = [model.input for model in members]  # define multi-headed input
 	ensemble_outputs = [model.output for model in members] # concatenate merge output from each model
 	merge = concatenate(ensemble_outputs)
