@@ -181,7 +181,7 @@ for i in range(Y.shape[0]):
 	x, y = X[i], Y[i]
 	prev_activation = np.zeros((hidden_dim,1))
 	# forward pass
-	for timestep in range(seq_len):
+	for _ in range(seq_len):
 		mulu = np.dot(U, x)
 		mulw = np.dot(W, prev_activation)
 		_sum = mulu + mulw
@@ -203,7 +203,7 @@ for i in range(Y_validation.shape[0]):
 	x, y = X[i], Y[i]
 	prev_activation = np.zeros((hidden_dim,1))
 	# forward pass
-	for timestep in range(seq_len):
+	for _ in range(seq_len):
 		mulu = np.dot(U, x)
 		mulw = np.dot(W, prev_activation)
 		_sum = mulu + mulw

@@ -8,12 +8,12 @@ d.year, d.month, d.day, d.hour, d.minute, d.second # (2021, 1, 1, 0, 0, 0)
 
 # date or timestamp of now
 dt.datetime.now()   # <datetime>
-dt.datetime.today() # ...
-dt.datetime.now() == dt.datetime.today() # True
+dt.datetime.now()
+dt.datetime.now() == dt.datetime.now()
 
 dt.datetime.now().timestamp()   # timestamp (seconds)
-dt.datetime.today().timestamp() # ...
-dt.datetime.now().timestamp() == dt.datetime.today().timestamp() # True
+dt.datetime.now().timestamp()
+dt.datetime.now().timestamp() == dt.datetime.now().timestamp()
 
 # date only
 d = dt.date.today()
@@ -29,7 +29,7 @@ dt.datetime.fromtimestamp(1254130200)    # datetime(2009, 9, 28, 13, 0)
 
 # str
 dt.datetime(2021,1,1).strftime('%Y %m %d')     # format:  '2021 01 01'
-dt.datetime.today().strftime('%Y%m')           # format:  '202202'
+dt.datetime.now().strftime('%Y%m')
 dt.datetime.strptime('2021 01 01', '%Y %m %d') # parse:   datetime(2021,1,1,0,0)
 dt.datetime.strptime('20220101', '%Y%m%d')     # parse:   datetime(2022,1,1,0,0)
 # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes

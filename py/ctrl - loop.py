@@ -33,9 +33,7 @@ for i in range(5):
 	def f(): print(i) # 'i' is not defined
 	f()
 
-fs = []
-for i in range(5):
-	fs.append(lambda: i**2)
+fs = [lambda: i**2 for i in range(5)]
 fs[2]() # 16
 fs[4]() # 16
 

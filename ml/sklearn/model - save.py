@@ -7,7 +7,7 @@ from sklearn import datasets
 x, y = datasets.load_iris(return_X_y=True)
 clf = svm.SVC()
 clf.fit(x, y)
-x_test = x[0:100]
+x_test = x[:100]
 y_pred  = clf.predict(x_test)
 
 

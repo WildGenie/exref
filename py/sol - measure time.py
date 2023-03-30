@@ -12,5 +12,5 @@ time.process_time()
 time.perf_counter()
 
 import datetime
-datetime.datetime.today().timestamp()
+datetime.datetime.now().timestamp()
 str( datetime.timedelta(t2-t1) ) # '4 days, 23:59:51.956160'

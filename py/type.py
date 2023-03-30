@@ -21,15 +21,15 @@ bytearray(5)         # bytearray
 memoryview(bytes(5)) # memoryview
 
 # type fns
-str('Hello World')       # str
-int(20)                  # int
-float(20.5)              # float
+'Hello World'
+20
+20.5
 complex(1j)              # complex
-list(('a','b','c'))      # list
-tuple(('a','b','c'))     # tuple
+['a', 'b', 'c']
+('a', 'b', 'c')
 range(6)                 # range
 dict(name='John', age=36)# dict
-set(('a','b','c'))       # set
+{'a', 'b', 'c'}
 frozenset(('a','b','c')) # frozenset
 bool(5)                  # bool
 bytes(5)                 # bytes
@@ -41,5 +41,5 @@ str(25)        # '25'
 int('25')      # 25
 float('12.34') # 12.34
 
-if None or 0 or 0.0 or '' or [] or {} or set():
+if set():
 	print('dead code') # not reached

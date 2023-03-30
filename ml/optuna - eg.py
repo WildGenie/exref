@@ -29,7 +29,7 @@ def main():
 
 	print('  Params: ')
 	for key, value in trial.params.items():
-		print('    {}: {}'.format(key, value))
+		print(f'    {key}: {value}')
 
 def objective(trial):
 	train_ds, valid_ds = get_mnist() # get mnist data
@@ -54,7 +54,7 @@ def create_model(trial):
 	model = keras.models.Sequential()
 	model.add(Flatten())
 	for i in range(n_layers):
-		num_hidden = trial.suggest_int('n_units_l{}'.format(i), 4, 128, log=True)
+		num_hidden = trial.suggest_int(f'n_units_l{i}', 4, 128, log=True)
 		model.add(
 			Dense(
 				num_hidden,
@@ -70,7 +70,7 @@ def create_model(trial):
 def learn(model, optimizer, dataset, mode='eval'):
 	accuracy = keras.metrics.Accuracy('accuracy', dtype=tf.float32)
 
-	for batch, (images, labels) in enumerate(dataset):
+	for images, labels in dataset:
 		with tf.GradientTape() as tape:
 			logits = model(images, training=(mode == 'train'))
 			loss_value = tf.reduce_mean(
@@ -91,7 +91,7 @@ def create_optimizer(trial):
 	# we optimize the choice of optimizers as well as their parameters
 	optimizer_options = ['RMSprop', 'Adam', 'SGD']
 	optimizer_selected = trial.suggest_categorical('optimizer', optimizer_options)
-	
+
 	k = {}
 	if optimizer_selected == 'RMSprop':
 		k['learning_rate'] = trial.suggest_float('rmsprop_learning_rate', 0.00001, 0.1, log=True)
@@ -103,8 +103,7 @@ def create_optimizer(trial):
 		k['learning_rate'] = trial.suggest_float('sgd_opt_learning_rate', 0.00001, 0.1, log=True)
 		k['momentum']      = trial.suggest_float('sgd_opt_momentum', 0.00001, 0.1, log=True)
 
-	optimizer = getattr(keras.optimizers, optimizer_selected)(**k)
-	return optimizer
+	return getattr(keras.optimizers, optimizer_selected)(**k)
 
 def get_mnist():
 	(x_train, y_train), (x_valid, y_valid) = mnist.load_data()

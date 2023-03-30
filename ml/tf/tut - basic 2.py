@@ -29,7 +29,7 @@ print(tf.__version__)
 # build a convolutional neural network (CNN) classifier to classify images of handwritten digits
 # Set common constants
 this_repo_url = 'https://github.com/lexfridman/mit-deep-learning/raw/master/'
-this_tutorial_url = this_repo_url + 'tutorial_deep_learning_basics'
+this_tutorial_url = f'{this_repo_url}tutorial_deep_learning_basics'
 
 
 # load the dataset
@@ -97,7 +97,7 @@ def cv2_imshow(img):
 	img_ip = IPython.display.Image(data=ret)
 	IPython.display.display(img_ip)
 
-cap = cv2.VideoCapture(mnist_dream_path) 
+cap = cv2.VideoCapture(mnist_dream_path)
 vw = None
 frame = -1 # counter for debugging (mostly), 0-indexed
 
@@ -106,11 +106,11 @@ while True: # should 481 frames
 	frame += 1
 	ret, img = cap.read()
 	if not ret: break
-						 
+
 	assert img.shape[0] == img.shape[1] # should be a square
 	if img.shape[0] != 720:
 		img = cv2.resize(img, (720, 720))
-		 
+
 	#preprocess the image for prediction
 	img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	img_proc = cv2.resize(img_proc, (28, 28))
@@ -119,49 +119,47 @@ while True: # should 481 frames
 
 	net_in = np.expand_dims(img_proc, axis=0) # expand dimension to specify batch size of 1
 	net_in = np.expand_dims(net_in, axis=3) # expand dimension to specify number of channels
-	
+
 	preds = model.predict(net_in)[0]
 	guess = np.argmax(preds)
 	perc = np.rint(preds * 100).astype(int)
-	
+
 	img = 255 - img
 	pad_color = 0
 	img = np.pad(img, ((0,0), (0,1280-720), (0,0)), mode='constant', constant_values=(pad_color))  
-	
+
 	line_type = cv2.LINE_AA
 	font_face = cv2.FONT_HERSHEY_SIMPLEX
-	font_scale = 1.3        
+	font_scale = 1.3
 	thickness = 2
 	x, y = 740, 60
 	color = (255, 255, 255)
-	
+
 	text = "Neural Network Output:"
 	cv2.putText(img, text=text, org=(x, y), fontScale=font_scale, fontFace=font_face, thickness=thickness,
 									color=color, lineType=line_type)
-	
+
 	text = "Input:"
 	cv2.putText(img, text=text, org=(30, y), fontScale=font_scale, fontFace=font_face, thickness=thickness,
 									color=color, lineType=line_type)   
-			
+
 	y = 130
+	rect_start = 180
 	for i, p in enumerate(perc):
-		if i == guess: color = (255, 218, 158)
-		else: color = (100, 100, 100)
-				
+		color = (255, 218, 158) if i == guess else (100, 100, 100)
 		rect_width = 0
 		if p > 0: rect_width = int(p * 3.3)
-		
-		rect_start = 180
+
 		cv2.rectangle(img, (x+rect_start, y-5), (x+rect_start+rect_width, y-20), color, -1)
 
 		text = '{}: {:>3}%'.format(i, int(p))
 		cv2.putText(img, text=text, org=(x, y), fontScale=font_scale, fontFace=font_face, thickness=thickness,
 								color=color, lineType=line_type)
 		y += 60
-	
+
 	# if you don't want to save the output as a video, set this to False
 	save_video = True
-	
+
 	if save_video:
 		if vw is None:
 			codec = cv2.VideoWriter_fourcc(*'DIVX')
@@ -170,7 +168,7 @@ while True: # should 481 frames
 		# 15 fps above doesn't work robustly so we right frame twice at 30 fps
 		vw.write(img)
 		vw.write(img)
-	
+
 	# scale down image for display
 	img_disp = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
 	cv2_imshow(img_disp)

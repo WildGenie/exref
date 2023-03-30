@@ -302,12 +302,13 @@ def build_model(allow_cudnn_kernel=True):
 		lstm_layer = RNN(
 			LSTMCell(units), input_shape=(None, input_dim)
 		)
-	model = keras.models.Sequential([
-		lstm_layer,
-		BatchNormalization(),
-		Dense(output_size),
-	])
-	return model
+	return keras.models.Sequential(
+		[
+			lstm_layer,
+			BatchNormalization(),
+			Dense(output_size),
+		]
+	)
 
 
 # Let's load the MNIST dataset:
@@ -357,7 +358,7 @@ with tf.device('CPU:0'):
 	cpu_model.set_weights(model.get_weights())
 	result = tf.argmax(cpu_model.predict_on_batch(tf.expand_dims(sample, 0)), axis=1)
 	print(
-		'Predicted result is: %s, target result is: %s' % (result.numpy(), sample_label)
+		f'Predicted result is: {result.numpy()}, target result is: {sample_label}'
 	)
 	plt.imshow(sample, cmap=plt.get_cmap('gray'))
 	plt.show()

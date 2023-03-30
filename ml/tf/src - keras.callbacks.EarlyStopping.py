@@ -23,12 +23,11 @@ class EarlyStopping(Callback):
 			self.monitor_op = np.less
 		elif mode == 'max':
 			self.monitor_op = np.greater
-		else:
-			if (self.monitor.endswith('acc') or self.monitor.endswith('accuracy') or
+		elif (self.monitor.endswith('acc') or self.monitor.endswith('accuracy') or
 					self.monitor.endswith('auc')):
-				self.monitor_op = np.greater
-			else:
-				self.monitor_op = np.less
+			self.monitor_op = np.greater
+		else:
+			self.monitor_op = np.less
 
 		if self.monitor_op == np.greater:
 			self.min_delta *= 1

@@ -33,5 +33,5 @@ n != n        # True
 (2.2).is_integer() # False
 (2.0).is_integer() # True
 
-2.3 == int(2.3) # False
-2.0 == int(2.0) # True
+int(2.3) == 2.3
+int(2.0) == 2.0
